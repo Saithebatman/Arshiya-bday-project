@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Our Journey 💖</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #2c0a33, #ec56f1);
+      color: white;
+      overflow-x: hidden;
+    }
+
+    section {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1s ease;
+    }
+
+    section:not(.hidden) {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    h1, h2 {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    p.typing {
+      font-size: 24px;
+      border-right: 3px solid white;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 0;
+      animation: typing 4s steps(40, end) forwards, blink 0.75s step-end infinite;
+    }
+
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
+    @keyframes blink {
+      50% { border-color: transparent; }
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #f35bf8;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    #page3 img {
+      width: 300px;
+      height: auto;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    #countdown {
+      font-size: 28px;
+      color: #fff;
+      margin-top: 30px;
+    }
+
+    input[type="date"] {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 10px;
+      border: none;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    audio {
+      display: none;
+    }
+
+    /* ✅ Mobile Responsive Styles */
+    @media (max-width: 600px) {
+      section {
+        padding: 20px;
+      }
+
+      h1, h2 {
+        font-size: 22px;
+      }
+
+      p.typing {
+        font-size: 18px;
+      }
+
+      #page3 img {
+        width: 90%;
+        max-width: 300px;
+      }
+
+      button {
+        width: 100%;
+        font-size: 15px;
+        padding: 10px;
+      }
+
+      input[type="date"] {
+        width: 100%;
+        font-size: 15px;
+      }
+
+      #countdown {
+        font-size: 20px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <audio id="bg-music" src="Nenjukulla-Nee.mp3" autoplay loop></audio>
+
+  <!-- Page 1 -->
+  <section id="page1">
+    <img src="https://media.tenor.com/p6fbpOnCi0sAAAAM/sport-running.gif" alt="teddy" style="width: 180px; height: 180px; margin-bottom: 20px; border-radius: 50%; object-fit: cover; box-shadow: 0 4px 10px rgba(0,0,0,0.4);">
+    <h1>Hello, Arshiya 🖤 !</h1>
+    <p>Happy Birthday 💗</p>
+    <button onclick="nextPage()">Continue to the journey</button>
+  </section>
+
+  <!-- Page 2 -->
+  <section id="page2" class="hidden">
+    <h1>5 Reasons Why I Don’t Leave You 😘</h1>
+    <p class="typing" id="typedText">1. Your smile makes my world brighter 💫</p>
+    <button onclick="nextReason()">Next Reason</button>
+  </section>
+
+  <!-- Page 3 -->
+  <section id="page3" class="hidden">
+    <h1>Our Memories 📸</h1>
+    <img id="slideImg" src="" alt="Memory Photo">
+    <div id="slider-controls">
+      <button onclick="prevSlide()">⬅️ Previous</button>
+      <button onclick="nextSlide()">Next ➡️</button>
+    </div>
+    <button onclick="nextPage()">One More Surprise 💌</button>
+  </section>
+
+  <!-- Page 4 -->
+  <section id="page4" class="hidden">
+    <h1>🎉 Choose Our First Date 🎉</h1>
+    <p>💌 Select your date to meet 👇</p>
+    <input type="date" id="dateInput">
+    <br>
+    <button onclick="startCountdown()">Start Countdown</button>
+    <div id="countdown" class="hidden"></div>
+  </section>
+
+  <!-- Music Control -->
+  <button onclick="toggleMusic()" style="position: fixed; bottom: 20px; right: 20px; z-index: 999;">🔊 Play/Pause Music</button>
+
+  <script>
+    let currentPage = 1;
+    let currentReason = 0;
+    const reasons = [
+      "💗 Ungaludaiya loyal aana Character 😊 💫",
+      "💗 Neenga eppavume unga side mattum tha care pannuvinga 💪",
+      "💗 Ungaluku Ethavathu help thevai patta enta tha keping 💞",
+      "💗 Neenga ungaludaiya decision la crt ah iruping 🥰",
+      "💗 You’re my best friend & enemy ❤️‍🔥"
+    ];
+
+    function nextPage() {
+      document.getElementById(`page${currentPage}`).classList.add("hidden");
+      currentPage++;
+      document.getElementById(`page${currentPage}`).classList.remove("hidden");
+
+      if (currentPage === 2) {
+        currentReason = 0;
+        showReason();
+      }
+
+      if (currentPage === 3) {
+        showSlide(currentIndex);
+      }
+    }
+
+    function showReason() {
+      const text = document.getElementById("typedText");
+      text.innerText = reasons[currentReason];
+      text.style.animation = "none";
+      void text.offsetWidth;
+      text.style.animation = null;
+    }
+
+    function nextReason() {
+      currentReason++;
+      if (currentReason >= reasons.length) {
+        nextPage();
+        return;
+      }
+      showReason();
+    }
+
+    // Slideshow
+    const slideImages = [
+      "image1.jpg.png",
+      "im.png",
+      "image3.png",
+      "image4.png",
+      "nio.jpg",
+      "nio2.png"
+    ];
+
+    let currentIndex = 0;
+    const slideImgElement = document.getElementById("slideImg");
+
+    function showSlide(index) {
+      slideImgElement.src = slideImages[index];
+    }
+
+    function nextSlide() {
+      currentIndex = (currentIndex + 1) % slideImages.length;
+      showSlide(currentIndex);
+    }
+
+    function prevSlide() {
+      currentIndex = (currentIndex - 1 + slideImages.length) % slideImages.length;
+      showSlide(currentIndex);
+    }
+
+    // Countdown
+    let countdownInterval;
+    function startCountdown() {
+      const userDate = document.getElementById("dateInput").value;
+      const countdownDiv = document.getElementById("countdown");
+      if (!userDate) {
+        alert("Please select a date!");
+        return;
+      }
+
+      const endDate = new Date(userDate + "T00:00:00");
+      const today = new Date();
+      if (endDate <= today) {
+        alert("Please choose a date after today!");
+        return;
+      }
+
+      countdownDiv.classList.remove("hidden");
+      if (countdownInterval) clearInterval(countdownInterval);
+      countdownInterval = setInterval(() => {
+        const now = new Date();
+        const diff = endDate - now;
+        if (diff <= 0) {
+          countdownDiv.innerHTML = "🎉 The day has arrived! 🎉";
+          clearInterval(countdownInterval);
+          return;
+        }
+
+        const totalSeconds = Math.floor(diff / 1000);
+        const days = Math.floor(totalSeconds / (3600 * 24));
+        const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+        countdownDiv.innerHTML = `💞 <b>${days}</b> Days ⏰ <b>${hours}</b> Hours 🕒 <b>${minutes}</b> Minutes ⏱️ <b>${seconds}</b> Seconds`;
+      }, 1000);
+    }
+
+    // Music Controls
+    const music = document.getElementById("bg-music");
+    function toggleMusic() {
+      if (music.paused) {
+        music.play().catch(() => {
+          alert("Please tap the Play/Pause button to enable music.");
+        });
+      } else {
+        music.pause();
+      }
+    }
+
+    // Init first slide
+    showSlide(currentIndex);
+  </script>
+</body>
+</html>
